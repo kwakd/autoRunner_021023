@@ -25,6 +25,7 @@ public class testPlayerController : MonoBehaviour
     public float jumpForce;
 
     public bool isGrounded;
+    public bool canDoubleJump;
 
     public LayerMask whatIsGround;
 
@@ -42,17 +43,29 @@ public class testPlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
         isGrounded = Physics2D.IsTouchingLayers(myCollider, whatIsGround);
 
         //moves the player
         myRigidBody.velocity = new Vector2(moveSpeed, myRigidBody.velocity.y);
 
-        if(Input.GetKeyDown(KeyCode.Space)){
-            if(isGrounded)
+        //touches the ground
+        if(isGrounded && !Input.GetButtonDown("Jump"))
+        {
+            canDoubleJump = true;
+        }
+
+        //jump
+        if(Input.GetButtonDown("Jump")){
+            if(isGrounded || canDoubleJump)
             {
                 myRigidBody.velocity = new Vector2(myRigidBody.velocity.x, jumpForce);
+                canDoubleJump = !canDoubleJump;
             }
+            
+        }
+        //better jumping aka timed jumps
+        if(Input.GetButtonUp("Jump") && myRigidBody.velocity.y > 0f){
+           myRigidBody.velocity = new Vector2(myRigidBody.velocity.x, myRigidBody.velocity.y * 0.5f);
         }
     }
 
