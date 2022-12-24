@@ -31,6 +31,7 @@ public class testPlayerController : MonoBehaviour
 
     private Rigidbody2D myRigidBody;
     private Collider2D myCollider;
+    private Animator myAnimator;
 
 
     // Start is called before the first frame update
@@ -38,6 +39,7 @@ public class testPlayerController : MonoBehaviour
     {
         myRigidBody = GetComponent<Rigidbody2D>();
         myCollider = GetComponent<Collider2D>();
+        myAnimator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -45,10 +47,10 @@ public class testPlayerController : MonoBehaviour
     {
         isGrounded = Physics2D.IsTouchingLayers(myCollider, whatIsGround);
 
-        //moves the player
+        //moves the player forward
         myRigidBody.velocity = new Vector2(moveSpeed, myRigidBody.velocity.y);
 
-        //touches the ground
+        //when player touches the ground value resets
         if(isGrounded && !Input.GetButtonDown("Jump"))
         {
             canDoubleJump = true;
@@ -63,10 +65,32 @@ public class testPlayerController : MonoBehaviour
             }
             
         }
-        //better jumping aka timed jumps
+
+        //better jumping logic
         if(Input.GetButtonUp("Jump") && myRigidBody.velocity.y > 0f){
            myRigidBody.velocity = new Vector2(myRigidBody.velocity.x, myRigidBody.velocity.y * 0.5f);
         }
+
+        //sets parameter values for animator purposes
+        myAnimator.SetFloat("Speed", myRigidBody.velocity.x);
+        myAnimator.SetFloat("Jumping", myRigidBody.velocity.y);
+        myAnimator.SetBool("Grounded", isGrounded);
+        myAnimator.SetBool("DoubleJump", canDoubleJump);
+
+        //TODO: ANIMATION
+            // RUN
+            // RIP
+            // JUMP
+            // DOUBLE JUMP
+            // FALLING
+            // HURT
+
+        //TODO: STAMINA/HEALTH
+        //TODO: POWERUPS
+        //TODO: SCORE
+        //TODO: SCORE COLLECTIBLE
+        //TODO: STAGE
+        //TODO: SLIDE?
     }
 
 }
