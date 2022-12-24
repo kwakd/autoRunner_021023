@@ -51,7 +51,7 @@ public class testPlayerController : MonoBehaviour
         isGrounded = Physics2D.IsTouchingLayers(myCollider, whatIsGround);
 
         //moves the player forward
-        //ONGOING: if player is dead won't move
+        //if player is dead won't move
         if(myHealth.isPlayerDead == false)
         {
             myRigidBody.velocity = new Vector2(moveSpeed, myRigidBody.velocity.y);
@@ -62,7 +62,6 @@ public class testPlayerController : MonoBehaviour
             myRigidBody.velocity = new Vector2(0, myRigidBody.velocity.y);
         }
         
-
         //when player touches the ground value resets
         if(isGrounded && !Input.GetButtonDown("Jump"))
         {
@@ -70,7 +69,7 @@ public class testPlayerController : MonoBehaviour
         }
 
         //jump
-        if(Input.GetButtonDown("Jump")){
+        if(Input.GetButtonDown("Jump") && !myHealth.isPlayerDead){
             if(isGrounded || canDoubleJump)
             {
                 myRigidBody.velocity = new Vector2(myRigidBody.velocity.x, jumpForce);
@@ -90,9 +89,9 @@ public class testPlayerController : MonoBehaviour
         myAnimator.SetBool("Grounded", isGrounded);
         myAnimator.SetBool("DoubleJump", canDoubleJump);
 
-        //TODO: POWERUPS
         //TODO: SCORE
         //TODO: SCORE COLLECTIBLE
+        //TODO: POWERUPS
         //TODO: STAGE
         //TODO: SLIDE?
     }
