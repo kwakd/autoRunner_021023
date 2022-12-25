@@ -28,10 +28,12 @@ public class testPlayerController : MonoBehaviour
     public bool canDoubleJump;
 
     public LayerMask whatIsGround;
+    public HealthSystem myHealth;
 
     private Rigidbody2D myRigidBody;
     private Collider2D myCollider;
     private Animator myAnimator;
+    
 
 
     // Start is called before the first frame update
@@ -40,6 +42,7 @@ public class testPlayerController : MonoBehaviour
         myRigidBody = GetComponent<Rigidbody2D>();
         myCollider = GetComponent<Collider2D>();
         myAnimator = GetComponent<Animator>();
+        myHealth = GetComponent<HealthSystem>();
     }
 
     // Update is called once per frame
@@ -48,8 +51,17 @@ public class testPlayerController : MonoBehaviour
         isGrounded = Physics2D.IsTouchingLayers(myCollider, whatIsGround);
 
         //moves the player forward
-        myRigidBody.velocity = new Vector2(moveSpeed, myRigidBody.velocity.y);
-
+        //if player is dead won't move
+        if(myHealth.isPlayerDead == false)
+        {
+            myRigidBody.velocity = new Vector2(moveSpeed, myRigidBody.velocity.y);
+            myHealth.TakeDamage(0.001f);
+        }
+        else
+        {
+            myRigidBody.velocity = new Vector2(0, myRigidBody.velocity.y);
+        }
+        
         //when player touches the ground value resets
         if(isGrounded && !Input.GetButtonDown("Jump"))
         {
@@ -57,7 +69,7 @@ public class testPlayerController : MonoBehaviour
         }
 
         //jump
-        if(Input.GetButtonDown("Jump")){
+        if(Input.GetButtonDown("Jump") && !myHealth.isPlayerDead){
             if(isGrounded || canDoubleJump)
             {
                 myRigidBody.velocity = new Vector2(myRigidBody.velocity.x, jumpForce);
@@ -77,18 +89,9 @@ public class testPlayerController : MonoBehaviour
         myAnimator.SetBool("Grounded", isGrounded);
         myAnimator.SetBool("DoubleJump", canDoubleJump);
 
-        //TODO: ANIMATION
-            // RUN
-            // RIP
-            // JUMP
-            // DOUBLE JUMP
-            // FALLING
-            // HURT
-
-        //TODO: STAMINA/HEALTH
-        //TODO: POWERUPS
         //TODO: SCORE
         //TODO: SCORE COLLECTIBLE
+        //TODO: POWERUPS
         //TODO: STAGE
         //TODO: SLIDE?
     }
