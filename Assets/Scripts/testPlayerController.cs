@@ -28,11 +28,13 @@ public class testPlayerController : MonoBehaviour
     public bool canDoubleJump;
 
     public LayerMask whatIsGround;
-    public HealthSystem myHealth;
-
+    
     private Rigidbody2D myRigidBody;
     private Collider2D myCollider;
     private Animator myAnimator;
+
+    private HealthSystem myHealth;
+    private ScoreManager myScoreManager;
     
 
 
@@ -43,6 +45,8 @@ public class testPlayerController : MonoBehaviour
         myCollider = GetComponent<Collider2D>();
         myAnimator = GetComponent<Animator>();
         myHealth = GetComponent<HealthSystem>();
+
+        myScoreManager = FindObjectOfType<ScoreManager>();
     }
 
     // Update is called once per frame
@@ -50,19 +54,20 @@ public class testPlayerController : MonoBehaviour
     {
         isGrounded = Physics2D.IsTouchingLayers(myCollider, whatIsGround);
 
-        //moves the player forward
-        //if player is dead won't move
+        //if player is alive keep moving forward
+        //else player is dead stop moving
         if(myHealth.isPlayerDead == false)
         {
             myRigidBody.velocity = new Vector2(moveSpeed, myRigidBody.velocity.y);
-            myHealth.TakeDamage(0.001f);
+            myHealth.TakeDamage(0.5f * Time.deltaTime);
         }
         else
         {
             myRigidBody.velocity = new Vector2(0, myRigidBody.velocity.y);
+            myScoreManager.scoreIncreasing = false;
         }
         
-        //when player touches the ground value resets
+        //if player is grounded and not pressing jump button
         if(isGrounded && !Input.GetButtonDown("Jump"))
         {
             canDoubleJump = true;
