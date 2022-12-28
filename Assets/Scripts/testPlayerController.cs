@@ -52,6 +52,7 @@ public class testPlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //is player touching the ground checker
         isGrounded = Physics2D.IsTouchingLayers(myCollider, whatIsGround);
 
         //if player is alive keep moving forward
@@ -94,10 +95,11 @@ public class testPlayerController : MonoBehaviour
         myAnimator.SetBool("Grounded", isGrounded);
         myAnimator.SetBool("DoubleJump", canDoubleJump);
 
-        //TODO: SCORE COLLECTIBLE
+        //TODO: HEALTH COLLECTIBLE
         //TODO: POWERUPS
-        //TODO: STAGE
-        //TODO: SLIDE?
+        //TODO: STAGE | have to find out how to make stage transitions
+        //TODO: SLIDE? 
+        //TODO: JUMP DASH?
     }
 
 }

@@ -27,7 +27,11 @@ public class pickupPoints : MonoBehaviour
         if(other.gameObject.name == "testPlayer2")
         {
             myScoreManager.AddScore(scoreToGive);
-            gameObject.SetActive(false);
+            
+            // look into setactive vs destory
+            // also have to look into object pooling
+            //gameObject.SetActive(false);
+            Destroy(this.gameObject);
         }
     }
 }
