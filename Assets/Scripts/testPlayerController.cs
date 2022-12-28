@@ -28,12 +28,14 @@ public class testPlayerController : MonoBehaviour
     public bool canDoubleJump;
 
     public LayerMask whatIsGround;
-    
+
+    public  SpriteRenderer mySprite;
+
     private Rigidbody2D myRigidBody;
     private Collider2D myCollider;
     private Animator myAnimator;
-
     private HealthSystem myHealth;
+
     private ScoreManager myScoreManager;
     
 
@@ -41,12 +43,17 @@ public class testPlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        mySprite = GetComponent<SpriteRenderer>();
+
         myRigidBody = GetComponent<Rigidbody2D>();
         myCollider = GetComponent<Collider2D>();
         myAnimator = GetComponent<Animator>();
         myHealth = GetComponent<HealthSystem>();
 
         myScoreManager = FindObjectOfType<ScoreManager>();
+
+        Debug.Log("PLAYER moveSpeed: " + moveSpeed);
+        Debug.Log("PLAYER jumpForce: " + jumpForce);
     }
 
     // Update is called once per frame
