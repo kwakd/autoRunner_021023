@@ -18,7 +18,7 @@ public class FillStatusBar : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //if player RIP
+        //if player RIP then disable fillImage
         if(slider.value <= slider.minValue)
         {
             fillImage.enabled = false;
