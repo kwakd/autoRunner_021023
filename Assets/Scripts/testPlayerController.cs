@@ -94,7 +94,6 @@ public class testPlayerController : MonoBehaviour
         myAnimator.SetBool("Grounded", isGrounded);
         myAnimator.SetBool("DoubleJump", canDoubleJump);
 
-        //TODO: SCORE
         //TODO: SCORE COLLECTIBLE
         //TODO: POWERUPS
         //TODO: STAGE
