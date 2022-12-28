@@ -103,7 +103,6 @@ public class testPlayerController : MonoBehaviour
         myAnimator.SetBool("DoubleJump", canDoubleJump);
 
         //TODO: HEALTH COLLECTIBLE
-        //TODO: POWERUPS
         //TODO: STAGE | have to find out how to make stage transitions
         //TODO: SLIDE? 
         //TODO: JUMP DASH?

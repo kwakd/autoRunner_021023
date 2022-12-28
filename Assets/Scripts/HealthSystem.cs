@@ -32,4 +32,9 @@ public class HealthSystem : MonoBehaviour
             //TODO: SHOW GAMEOVER SCREEN
         }
     }
+
+    public void GainHealth(float amount)
+    {
+        currentHealth += amount;
+    }
 }
