@@ -230,6 +230,27 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: spritesheet_players_6
+      rect:
+        serializedVersion: 2
+        x: 521
+        y: 0
+        width: 110
+        height: 151
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 02698cdeafe106449bd719b2e5bc89c0
+      internalID: -562865935
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -242,6 +263,7 @@ TextureImporter:
     secondaryTextures: []
     nameFileIdTable:
       spritesheet_players_1: 1573635146
+      spritesheet_players_6: -562865935
       spritesheet_players_2: 147037908
       spritesheet_players_0: -195005462
       spritesheet_players_5: 1874698966

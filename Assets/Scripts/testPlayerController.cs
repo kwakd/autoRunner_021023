@@ -25,28 +25,35 @@ public class testPlayerController : MonoBehaviour
     public float jumpForce;
 
     public bool isGrounded;
+    public bool isHurt;
+    public bool isInvincible;
     public bool canDoubleJump;
 
     public LayerMask whatIsGround;
-    
-    private Rigidbody2D myRigidBody;
-    private Collider2D myCollider;
-    private Animator myAnimator;
 
+    public SpriteRenderer mySprite;
+    public Collider2D myCollider;
+
+    private Rigidbody2D myRigidBody;
+    private Animator myAnimator;
     private HealthSystem myHealth;
+
     private ScoreManager myScoreManager;
     
-
-
     // Start is called before the first frame update
     void Start()
     {
+        mySprite = GetComponent<SpriteRenderer>();
+
         myRigidBody = GetComponent<Rigidbody2D>();
         myCollider = GetComponent<Collider2D>();
         myAnimator = GetComponent<Animator>();
         myHealth = GetComponent<HealthSystem>();
 
         myScoreManager = FindObjectOfType<ScoreManager>();
+
+        Debug.Log("PLAYER moveSpeed: " + moveSpeed);
+        Debug.Log("PLAYER jumpForce: " + jumpForce);
     }
 
     // Update is called once per frame
@@ -64,6 +71,7 @@ public class testPlayerController : MonoBehaviour
         }
         else
         {
+            Debug.Log("PLAYER is now RIP");
             myRigidBody.velocity = new Vector2(0, myRigidBody.velocity.y);
             myScoreManager.scoreIncreasing = false;
         }
@@ -81,7 +89,6 @@ public class testPlayerController : MonoBehaviour
                 myRigidBody.velocity = new Vector2(myRigidBody.velocity.x, jumpForce);
                 canDoubleJump = !canDoubleJump;
             }
-            
         }
 
         //better jumping logic
@@ -92,11 +99,15 @@ public class testPlayerController : MonoBehaviour
         //sets parameter values for animator purposes
         myAnimator.SetFloat("Speed", myRigidBody.velocity.x);
         myAnimator.SetFloat("Jumping", myRigidBody.velocity.y);
+
         myAnimator.SetBool("Grounded", isGrounded);
+        myAnimator.SetBool("isHurt", isHurt);
         myAnimator.SetBool("DoubleJump", canDoubleJump);
 
-        //TODO: HEALTH COLLECTIBLE
-        //TODO: POWERUPS
+
+        //TODO: DEATHZONE
+        //TODO: MENU
+        //TODO: RESET/GAMEOVER SCREEN
         //TODO: STAGE | have to find out how to make stage transitions
         //TODO: SLIDE? 
         //TODO: JUMP DASH?

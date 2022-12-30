@@ -2,30 +2,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class pickupPoints : MonoBehaviour
+public class pickupHealth : MonoBehaviour
 {
-
-    public int scoreToGive;
-
-    private ScoreManager myScoreManager;
-
+    private HealthSystem myHealth;
 
     // Start is called before the first frame update
     void Start()
     {
-        myScoreManager = FindObjectOfType<ScoreManager>();
+        myHealth = FindObjectOfType<HealthSystem>();
     }
 
     void OnTriggerEnter2D(Collider2D other)
     {
         if(other.gameObject.name == "testPlayer2")
         {
-            myScoreManager.AddScore(scoreToGive);
+            myHealth.GainHealth(1f);
             
             // look into setactive vs destory
             // also have to look into object pooling
-            //gameObject.SetActive(false);
-            Destroy(this.gameObject);
+            gameObject.SetActive(false);
+            //Destroy(this.gameObject);
         }
     }
 }
