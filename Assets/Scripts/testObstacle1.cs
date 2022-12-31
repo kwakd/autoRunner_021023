@@ -24,11 +24,11 @@ public class testObstacle1 : MonoBehaviour
 
             myHealth.TakeDamage(0.5f);
 
-            StartCoroutine(ResetPower());
+            StartCoroutine(ResetIFrame());
         }
     }
 
-    private IEnumerator ResetPower()
+    private IEnumerator ResetIFrame()
     {
         yield return new WaitForSeconds(0.5f);
         myPlayerController.moveSpeed = 5f;
