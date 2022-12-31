@@ -2040,7 +2040,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1982719390}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 25.03, y: -6.53, z: 0.41859937}
+  m_LocalPosition: {x: 19.5, y: -6.53, z: 0.41859937}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2060,7 +2060,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 6.296573, y: 0}
+  m_Offset: {x: 4.4629617, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -2071,7 +2071,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 13.593146, y: 1}
+  m_Size: {x: 31.195843, y: 1}
   m_EdgeRadius: 0
 --- !u!114 &1982719393
 MonoBehaviour:
@@ -2085,6 +2085,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30e7e964565b1cd489a96e7503cd719b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dZonePos: {fileID: 1982719390}
   thePlayer: {fileID: 473944113}
   respawnPoint: {fileID: 1120555540}
 --- !u!1 &2013997987

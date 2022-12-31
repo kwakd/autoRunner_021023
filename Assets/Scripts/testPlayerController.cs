@@ -68,6 +68,7 @@ public class testPlayerController : MonoBehaviour
         if(myHealth.isPlayerDead == false)
         {
             myRigidBody.velocity = new Vector2(moveSpeed, myRigidBody.velocity.y);
+            
             if(!isFall)
             {
                 myHealth.TakeDamage(0.5f * Time.deltaTime);
@@ -119,8 +120,6 @@ public class testPlayerController : MonoBehaviour
         myAnimator.SetBool("isHurt", isHurt);
         myAnimator.SetBool("DoubleJump", isDoubleJump);
 
-
-        //TODO: DEATHZONE AND RESPAWN
         //TODO: BETTER CAMERA
         //TODO: MENU
         //TODO: RESET/GAMEOVER SCREEN
