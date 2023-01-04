@@ -73,7 +73,7 @@ public class testPlayerController : MonoBehaviour
         {
             myRigidBody.velocity = new Vector2(moveSpeed, myRigidBody.velocity.y);
 
-            if(!isFall)
+            if(!isFall && !isInvincible)
             {
                 myHealth.TakeDamage(0.5f * Time.deltaTime);
             }
@@ -87,6 +87,8 @@ public class testPlayerController : MonoBehaviour
 
         }
         
+        //if player has fallen into deathZone then freeze them in the air
+        //else dont freeze
         if(isFall)
         {
             myRigidBody.isKinematic = true;
@@ -95,7 +97,6 @@ public class testPlayerController : MonoBehaviour
         else
         {
             myRigidBody.isKinematic = false;
-            //myRigidBody.velocity = new Vector2(moveSpeed, myRigidBody.velocity.y);
         }
 
         //if player is grounded and not pressing jump button
@@ -113,12 +114,12 @@ public class testPlayerController : MonoBehaviour
             }
         }
 
-        //better jumping logic
+        //for better jumping
         if(Input.GetButtonUp("Jump") && myRigidBody.velocity.y > 0f){
            myRigidBody.velocity = new Vector2(myRigidBody.velocity.x, myRigidBody.velocity.y * 0.5f);
         }
 
-        //sets parameter values for animator purposes
+        //sets parameter values for animator 
         myAnimator.SetFloat("Speed", myRigidBody.velocity.x);
         myAnimator.SetFloat("Jumping", myRigidBody.velocity.y);
 
@@ -127,8 +128,8 @@ public class testPlayerController : MonoBehaviour
         myAnimator.SetBool("DoubleJump", isDoubleJump);
 
         //TODO: MENU
-        //TODO: RESET/GAMEOVER SCREEN
         //TODO: BETTER CAMERA
+        //TODO: *****FIX PLAYER STILL STICKS TO SIDE OF PLATFORMS
         //TODO: STAGE | have to find out how to make stage transitions
         //TODO: SLIDE? 
         //TODO: JUMP DASH?

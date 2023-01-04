@@ -23,7 +23,7 @@ public class GameOverScript : MonoBehaviour
 
     public void ExitButton()
     {
-        Debug.Log("TODO: MAIN MENU");
+        SceneManager.LoadScene("testMenu");
     }
 
 }
