@@ -1,6 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+using TMPro;
 
 // void helperSnoopy()
 //     {
@@ -34,6 +37,7 @@ public class testPlayerController : MonoBehaviour
 
     public SpriteRenderer mySprite;
     public Collider2D myCollider;
+    public GameOverScript myGameOver;
 
     private Rigidbody2D myRigidBody;
     private Animator myAnimator;
@@ -68,7 +72,7 @@ public class testPlayerController : MonoBehaviour
         if(myHealth.isPlayerDead == false)
         {
             myRigidBody.velocity = new Vector2(moveSpeed, myRigidBody.velocity.y);
-            
+
             if(!isFall)
             {
                 myHealth.TakeDamage(0.5f * Time.deltaTime);
@@ -79,6 +83,8 @@ public class testPlayerController : MonoBehaviour
             Debug.Log("PLAYER is now RIP");
             myRigidBody.velocity = new Vector2(0, myRigidBody.velocity.y);
             myScoreManager.scoreIncreasing = false;
+            myGameOver.Setup(myScoreManager.scoreCount);
+
         }
         
         if(isFall)
@@ -89,7 +95,7 @@ public class testPlayerController : MonoBehaviour
         else
         {
             myRigidBody.isKinematic = false;
-            myRigidBody.velocity = new Vector2(moveSpeed, myRigidBody.velocity.y);
+            //myRigidBody.velocity = new Vector2(moveSpeed, myRigidBody.velocity.y);
         }
 
         //if player is grounded and not pressing jump button
@@ -120,9 +126,9 @@ public class testPlayerController : MonoBehaviour
         myAnimator.SetBool("isHurt", isHurt);
         myAnimator.SetBool("DoubleJump", isDoubleJump);
 
-        //TODO: BETTER CAMERA
         //TODO: MENU
         //TODO: RESET/GAMEOVER SCREEN
+        //TODO: BETTER CAMERA
         //TODO: STAGE | have to find out how to make stage transitions
         //TODO: SLIDE? 
         //TODO: JUMP DASH?

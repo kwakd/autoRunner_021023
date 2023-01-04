@@ -28,8 +28,6 @@ public class HealthSystem : MonoBehaviour
             isPlayerDead = true;
             //PLAY RIP ANIMATION
             myAnimator.SetBool("isDead", isPlayerDead);
-            
-            //TODO: SHOW GAMEOVER SCREEN
         }
     }
 

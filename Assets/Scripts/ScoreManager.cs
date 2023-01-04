@@ -27,7 +27,6 @@ public class ScoreManager : MonoBehaviour
             scoreCount += pointsPerSec * Time.deltaTime;
         }
         
-
         scoreText.text = "Score: " + Mathf.Round(scoreCount);
     }
 
