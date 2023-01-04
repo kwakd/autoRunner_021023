@@ -1,6 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+using TMPro;
 
 // void helperSnoopy()
 //     {
@@ -27,12 +30,14 @@ public class testPlayerController : MonoBehaviour
     public bool isGrounded;
     public bool isHurt;
     public bool isInvincible;
-    public bool canDoubleJump;
+    public bool isFall;
+    public bool isDoubleJump;
 
     public LayerMask whatIsGround;
 
     public SpriteRenderer mySprite;
     public Collider2D myCollider;
+    public GameOverScript myGameOver;
 
     private Rigidbody2D myRigidBody;
     private Animator myAnimator;
@@ -44,9 +49,9 @@ public class testPlayerController : MonoBehaviour
     void Start()
     {
         mySprite = GetComponent<SpriteRenderer>();
+        myCollider = GetComponent<Collider2D>();
 
         myRigidBody = GetComponent<Rigidbody2D>();
-        myCollider = GetComponent<Collider2D>();
         myAnimator = GetComponent<Animator>();
         myHealth = GetComponent<HealthSystem>();
 
@@ -67,27 +72,44 @@ public class testPlayerController : MonoBehaviour
         if(myHealth.isPlayerDead == false)
         {
             myRigidBody.velocity = new Vector2(moveSpeed, myRigidBody.velocity.y);
-            myHealth.TakeDamage(0.5f * Time.deltaTime);
+
+            if(!isFall)
+            {
+                myHealth.TakeDamage(0.5f * Time.deltaTime);
+            }
         }
         else
         {
             Debug.Log("PLAYER is now RIP");
             myRigidBody.velocity = new Vector2(0, myRigidBody.velocity.y);
             myScoreManager.scoreIncreasing = false;
+            myGameOver.Setup(myScoreManager.scoreCount);
+
         }
         
+        if(isFall)
+        {
+            myRigidBody.isKinematic = true;
+            myRigidBody.velocity = new Vector2(0, 0);
+        }
+        else
+        {
+            myRigidBody.isKinematic = false;
+            //myRigidBody.velocity = new Vector2(moveSpeed, myRigidBody.velocity.y);
+        }
+
         //if player is grounded and not pressing jump button
         if(isGrounded && !Input.GetButtonDown("Jump"))
         {
-            canDoubleJump = true;
+            isDoubleJump = true;
         }
 
         //jump
         if(Input.GetButtonDown("Jump") && !myHealth.isPlayerDead){
-            if(isGrounded || canDoubleJump)
+            if(isGrounded || isDoubleJump)
             {
                 myRigidBody.velocity = new Vector2(myRigidBody.velocity.x, jumpForce);
-                canDoubleJump = !canDoubleJump;
+                isDoubleJump = !isDoubleJump;
             }
         }
 
@@ -102,12 +124,11 @@ public class testPlayerController : MonoBehaviour
 
         myAnimator.SetBool("Grounded", isGrounded);
         myAnimator.SetBool("isHurt", isHurt);
-        myAnimator.SetBool("DoubleJump", canDoubleJump);
+        myAnimator.SetBool("DoubleJump", isDoubleJump);
 
-
-        //TODO: DEATHZONE
         //TODO: MENU
         //TODO: RESET/GAMEOVER SCREEN
+        //TODO: BETTER CAMERA
         //TODO: STAGE | have to find out how to make stage transitions
         //TODO: SLIDE? 
         //TODO: JUMP DASH?
