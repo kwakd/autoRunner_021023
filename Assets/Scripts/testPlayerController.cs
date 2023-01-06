@@ -127,9 +127,7 @@ public class testPlayerController : MonoBehaviour
         myAnimator.SetBool("isHurt", isHurt);
         myAnimator.SetBool("DoubleJump", isDoubleJump);
 
-        //TODO: MENU
         //TODO: BETTER CAMERA
-        //TODO: *****FIX PLAYER STILL STICKS TO SIDE OF PLATFORMS
         //TODO: STAGE | have to find out how to make stage transitions
         //TODO: SLIDE? 
         //TODO: JUMP DASH?
