@@ -21,29 +21,60 @@ using TMPro;
 //    	    Debug.Log(text);
 //     }
 
+//TODO: COUNTDOWN AT START && LOADING SCREEN?
+//TODO: STAGE | have to find out how to make stage transitions
+//TODO: COYOTE JUMP
+//TODO: CHARACTER SELECT SCREEN
+//TODO: MAKE OWN ASSETS
+//TODO: ENDLESS MODE
+//TODO: DIFFERENT CHARACTER?
+//TODO: SLIDE? 
+    
+//POLISH: CAMERA VALUES
+//POLISH: JUMP DASH
+//POLISH: TRAIL COLORS
+//POLISH: MENU
+//POLISH: CLEANUP CODE(make into functions)
+    
+//REDO: RESPAWN/CHECKPOINT
+
+//FOREVER: ALWAYS THINK ABOUT MOVEMENT
+
+//GOAL: SOMETHING LIKE THIS LMAO (https://www.youtube.com/watch?v=C3JQld-qWls&t=44s)
+
+
+
 public class testPlayerController : MonoBehaviour
 {
 
     public float moveSpeed;
     public float jumpForce;
+    public float fastFallForce;
+    public float dashTime;
 
-    public bool isGrounded;
     public bool isHurt;
     public bool isInvincible;
     public bool isFall;
-    public bool isDoubleJump;
+    
+    private bool isGrounded;
+    private bool isDoubleJump;
+    private bool canDash; 
 
     public LayerMask whatIsGround;
 
+    public GameOverScript myGameOver;
+
     public SpriteRenderer mySprite;
     public Collider2D myCollider;
-    public GameOverScript myGameOver;
 
     private Rigidbody2D myRigidBody;
     private Animator myAnimator;
     private HealthSystem myHealth;
 
     private ScoreManager myScoreManager;
+
+    [SerializeField] private TrailRenderer myTR;
+    
     
     // Start is called before the first frame update
     void Start()
@@ -56,9 +87,6 @@ public class testPlayerController : MonoBehaviour
         myHealth = GetComponent<HealthSystem>();
 
         myScoreManager = FindObjectOfType<ScoreManager>();
-
-        Debug.Log("PLAYER moveSpeed: " + moveSpeed);
-        Debug.Log("PLAYER jumpForce: " + jumpForce);
     }
 
     // Update is called once per frame
@@ -102,21 +130,38 @@ public class testPlayerController : MonoBehaviour
         //if player is grounded and not pressing jump button
         if(isGrounded && !Input.GetButtonDown("Jump"))
         {
+            myTR.emitting = false;
+
             isDoubleJump = true;
+            canDash = true;
         }
 
         //jump
         if(Input.GetButtonDown("Jump") && !myHealth.isPlayerDead){
+            myTR.startColor = new Color (1f, 0f, 0f);
+            myTR.emitting = true;
+
             if(isGrounded || isDoubleJump)
             {
                 myRigidBody.velocity = new Vector2(myRigidBody.velocity.x, jumpForce);
                 isDoubleJump = !isDoubleJump;
             }
         }
-
         //for better jumping
         if(Input.GetButtonUp("Jump") && myRigidBody.velocity.y > 0f){
-           myRigidBody.velocity = new Vector2(myRigidBody.velocity.x, myRigidBody.velocity.y * 0.5f);
+            myRigidBody.velocity = new Vector2(myRigidBody.velocity.x, myRigidBody.velocity.y * 0.5f);
+        }
+
+        if(Input.GetKeyDown(KeyCode.D) && canDash && !isGrounded){
+            StartCoroutine(Dash());
+        }
+
+        //fast falling
+        if(Input.GetKeyDown(KeyCode.S) && !isGrounded){
+            myTR.startColor = new Color (0.35f, 1f, 0.75f);
+            myTR.emitting = true;
+
+            myRigidBody.velocity = new Vector2(myRigidBody.velocity.x, myRigidBody.velocity.y-fastFallForce);
         }
 
         //sets parameter values for animator 
@@ -127,14 +172,35 @@ public class testPlayerController : MonoBehaviour
         myAnimator.SetBool("isHurt", isHurt);
         myAnimator.SetBool("DoubleJump", isDoubleJump);
 
-        //TODO: BETTER CAMERA
-        //TODO: STAGE | have to find out how to make stage transitions
-        //TODO: FAST FALLING 
-        //TODO: COYOTE JUMP
-        //TODO: JUMP DASH
-        //TODO: SLIDE? 
-        
+    }
 
+    private IEnumerator Dash()
+    {
+        myTR.startColor = Color.white;
+        canDash = false;
+        float cMoon = myRigidBody.gravityScale;
+        myRigidBody.gravityScale = 0f;
+        if(isInvincible)
+        {
+            moveSpeed = 15f;
+        }
+        else
+        {
+            moveSpeed = 10f;
+        }
+        myRigidBody.velocity = new Vector2(transform.localScale.x, 0f);
+        myTR.emitting = true;
+        yield return new WaitForSeconds(dashTime);
+        if(isInvincible)
+        {
+            moveSpeed = 10f;
+        }
+        else
+        {
+            moveSpeed = 5f;
+        }
+        myTR.emitting = false;
+        myRigidBody.gravityScale = cMoon;
     }
 
 }
