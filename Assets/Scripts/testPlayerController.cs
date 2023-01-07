@@ -129,8 +129,12 @@ public class testPlayerController : MonoBehaviour
 
         //TODO: BETTER CAMERA
         //TODO: STAGE | have to find out how to make stage transitions
+        //TODO: FAST FALLING 
+        //TODO: COYOTE JUMP
+        //TODO: JUMP DASH
         //TODO: SLIDE? 
-        //TODO: JUMP DASH?
+        
+
     }
 
 }
