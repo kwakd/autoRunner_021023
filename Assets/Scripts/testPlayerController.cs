@@ -202,6 +202,7 @@ public class testPlayerController : MonoBehaviour
             moveSpeed = 5f;
         }
         myTR.emitting = false;
+        myRigidBody.velocity = new Vector2(moveSpeed, myRigidBody.velocity.y);
         myRigidBody.gravityScale = cMoon;
     }
 
