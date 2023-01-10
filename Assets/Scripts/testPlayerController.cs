@@ -21,21 +21,24 @@ using TMPro;
 //    	    Debug.Log(text);
 //     }
 
-//TODO: COUNTDOWN AT START && LOADING SCREEN?
 //TODO: STAGE | have to find out how to make stage transitions
+//TODO: COUNTDOWN AT START && LOADING SCREEN?
 //TODO: COYOTE JUMP
-//TODO: CHARACTER SELECT SCREEN
 //TODO: MAKE OWN ASSETS
+//TODO: ADD SMOKE EFFECT WHEN LANDING
+//TODO: DUST PARTICLE EFFECT WHEN WALKING
 //TODO: ENDLESS MODE
+//TODO: *CHANGE SCORE SYSTEM SO ITS BASED ON DISTANCE
 //TODO: DIFFERENT CHARACTER?
+//TODO: CHARACTER SELECT SCREEN
 //TODO: SLIDE? 
     
-//POLISH: CAMERA VALUES
+//POLISH: CAMERA VALUES (WITH THE FASTER POWERUP CAMERA JITTERS)
 //POLISH: JUMP DASH
 //POLISH: TRAIL COLORS
 //POLISH: MENU
 //POLISH: CLEANUP CODE(make into functions)
-    
+
 //REDO: RESPAWN/CHECKPOINT
 
 //FOREVER: ALWAYS THINK ABOUT MOVEMENT
@@ -74,8 +77,7 @@ public class testPlayerController : MonoBehaviour
     private ScoreManager myScoreManager;
 
     [SerializeField] private TrailRenderer myTR;
-    
-    
+     
     // Start is called before the first frame update
     void Start()
     {
@@ -177,9 +179,11 @@ public class testPlayerController : MonoBehaviour
     private IEnumerator Dash()
     {
         myTR.startColor = Color.white;
+
         canDash = false;
         float cMoon = myRigidBody.gravityScale;
         myRigidBody.gravityScale = 0f;
+
         if(isInvincible)
         {
             moveSpeed = 15f;
@@ -188,9 +192,11 @@ public class testPlayerController : MonoBehaviour
         {
             moveSpeed = 10f;
         }
+
         myRigidBody.velocity = new Vector2(transform.localScale.x, 0f);
         myTR.emitting = true;
         yield return new WaitForSeconds(dashTime);
+        
         if(isInvincible)
         {
             moveSpeed = 10f;
@@ -199,7 +205,9 @@ public class testPlayerController : MonoBehaviour
         {
             moveSpeed = 5f;
         }
+        
         myTR.emitting = false;
+        myRigidBody.velocity = new Vector2(moveSpeed, myRigidBody.velocity.y);
         myRigidBody.gravityScale = cMoon;
     }
 
