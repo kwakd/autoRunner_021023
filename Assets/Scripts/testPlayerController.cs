@@ -186,11 +186,11 @@ public class testPlayerController : MonoBehaviour
 
         if(isInvincible)
         {
-            moveSpeed = 20f;
+            moveSpeed = 15f;
         }
         else
         {
-            moveSpeed = 15f;
+            moveSpeed = 12f;
         }
 
         myRigidBody.velocity = new Vector2(transform.localScale.x, 0f);
