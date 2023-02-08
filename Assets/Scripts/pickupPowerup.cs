@@ -16,7 +16,7 @@ public class pickupPowerup : MonoBehaviour
     {
         if(other.gameObject.name == "testPlayer2")
         {
-            myPlayerController.moveSpeed = 15f;
+            myPlayerController.moveSpeed = myPlayerController.playerBaseSpeed + 5f;
             Debug.Log("PLAYER POWERUP moveSpeed: " + myPlayerController.moveSpeed);
 
             //make object dissapear but still active for coroutine
@@ -32,9 +32,7 @@ public class pickupPowerup : MonoBehaviour
     private IEnumerator ResetPower()
     {
         yield return new WaitForSeconds(5f);
-        myPlayerController.moveSpeed = 10f;
-        Debug.Log("PLAYER moveSpeed: " + myPlayerController.moveSpeed);
-
+        myPlayerController.moveSpeed = myPlayerController.playerBaseSpeed;
         myPlayerController.mySprite.color = Color.white;
         myPlayerController.isInvincible = false;
         gameObject.SetActive(false);

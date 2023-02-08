@@ -24,8 +24,8 @@ public class pickupPoints : MonoBehaviour
             
             // look into setactive vs destory
             // also have to look into object pooling
-            //gameObject.SetActive(false);
-            Destroy(this.gameObject);
+            gameObject.SetActive(false);
+            //Destroy(this.gameObject);
         }
     }
 }

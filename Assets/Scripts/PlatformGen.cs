@@ -8,23 +8,22 @@ public class PlatformGen : MonoBehaviour
     public float distanceBetweenMin;
     public float distanceBetweenMax;
     public float maxHeightChange;
+    public float randomPointThreshold;
 
     public GameObject thePlatform;
     //public GameObject[] thePlatforms;
     public ObjectPooler[] theObjectPools;
     public Transform generationPoint;
     public Transform maxHeightPoint;
+    public PointGen thePointGenerator;
 
     private float minHeight;
-    private float maxHeight;
+    private float maxHeight; 
     private float heightChange;
     private float platformWidth;
     private float[] platformWidths;
     
     private int platformSelector;
-
-
-
 
     // Start is called before the first frame update
     void Start()
@@ -39,6 +38,8 @@ public class PlatformGen : MonoBehaviour
 
         minHeight = transform.position.y;
         maxHeight = maxHeightPoint.position.y;
+
+        thePointGenerator = FindObjectOfType<PointGen>();
     }
 
     // Update is called once per frame
@@ -72,6 +73,11 @@ public class PlatformGen : MonoBehaviour
             newPlatform.transform.rotation = transform.rotation;
             newPlatform.SetActive(true);
 
+            if(Random.Range(0f, 100f) < randomPointThreshold)
+            {
+                thePointGenerator.SpawnSmallPoints(new Vector3(transform.position.x, transform.position.y + 1f, transform.position.z));
+            }
+           
             transform.position = new Vector3(transform.position.x + (platformWidths[platformSelector]/2), transform.position.y, transform.position.z);
             
         }

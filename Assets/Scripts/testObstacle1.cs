@@ -31,7 +31,7 @@ public class testObstacle1 : MonoBehaviour
     private IEnumerator ResetIFrame()
     {
         yield return new WaitForSeconds(0.5f);
-        myPlayerController.moveSpeed = 5f;
+        myPlayerController.moveSpeed = myPlayerController.playerBaseSpeed;
         myPlayerController.isHurt = false;
         myPlayerController.mySprite.color = Color.white;
         Debug.Log("PLAYER moveSpeed: " + myPlayerController.moveSpeed);
