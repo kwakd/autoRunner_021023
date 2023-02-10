@@ -21,6 +21,7 @@ using TMPro;
 //    	    Debug.Log(text);
 //     }
 
+//TODO: AUTO HEALTH PLACER
 //TODO: AUTO POWERUP PLACER
 //TODO: AUTO OBSTACLE PLACER
 //TODO: REDO RESPAWN SYSTEM
@@ -31,7 +32,7 @@ using TMPro;
 //TODO: *CHANGE SCORE SYSTEM SO ITS BASED ON DISTANCE
 //TODO: ADD SMOKE EFFECT WHEN LANDING
 //TODO: DUST PARTICLE EFFECT WHEN WALKING
-//TODO: *LOOK INTO GROUND LOGIC AGAIN A LITTLE
+//TODO: *LOOK INTO GROUND LOGIC AGAIN A LITTLE -> because player can touch the paltform with their head and regain a dash or smth
 //TODO: EASTEREGG STAGE THROUGH MENUSCREEN?
 //TODO: DIFFERENT CHARACTER?
 //TODO: CHARACTER SELECT SCREEN?
@@ -45,6 +46,7 @@ using TMPro;
 //POLISH: CLEANUP CODE(make into functions)
 //POLISH: GROUND LOGIC
 //POLISH: TRAIL(WHEN DOING FIRST JUMP CANT CHANGE TRAIL COLOR)
+
 
 //FOREVER: ALWAYS THINK ABOUT MOVEMENT
 
@@ -60,6 +62,7 @@ public class testPlayerController : MonoBehaviour
     public float fastFallForce;
     public float dashTime;
     public float playerBaseSpeed;
+    public float playerBaseGravity;
 
     public bool isHurt;
     public bool isInvincible;
@@ -98,6 +101,7 @@ public class testPlayerController : MonoBehaviour
 
         myTR.emitting = true;
         playerBaseSpeed = moveSpeed;
+        playerBaseGravity = myRigidBody.gravityScale;
     }
 
     // Update is called once per frame
@@ -195,7 +199,6 @@ public class testPlayerController : MonoBehaviour
         myTR.startColor = Color.white;
 
         canDash = false;
-        float cMoon = myRigidBody.gravityScale;
         myRigidBody.gravityScale = 0f;
 
         if(isInvincible)
@@ -222,7 +225,7 @@ public class testPlayerController : MonoBehaviour
         
         //myTR.emitting = false;
         myRigidBody.velocity = new Vector2(moveSpeed, myRigidBody.velocity.y);
-        myRigidBody.gravityScale = cMoon;
+        myRigidBody.gravityScale = playerBaseGravity;
     }
 
 }
