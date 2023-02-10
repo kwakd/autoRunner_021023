@@ -16,15 +16,15 @@ public class pickupPowerup : MonoBehaviour
     {
         if(other.gameObject.name == "testPlayer2")
         {
-            myPlayerController.moveSpeed = 10f;
-            Debug.Log("PLAYER POWERUP moveSpeed: " + myPlayerController.moveSpeed);
+            myPlayerController.moveSpeed = myPlayerController.playerBaseSpeed + 5f;
+            //Debug.Log("PLAYER POWERUP moveSpeed: " + myPlayerController.moveSpeed);
 
             //make object dissapear but still active for coroutine
             gameObject.transform.localScale = new Vector3(0,0,0);
 
             myPlayerController.isInvincible = true;
             myPlayerController.mySprite.color = Color.yellow;
-            StartCoroutine(ResetPower());
+            StartCoroutine("ResetPower");
 
         }
     }
@@ -32,11 +32,10 @@ public class pickupPowerup : MonoBehaviour
     private IEnumerator ResetPower()
     {
         yield return new WaitForSeconds(5f);
-        myPlayerController.moveSpeed = 5f;
-        Debug.Log("PLAYER moveSpeed: " + myPlayerController.moveSpeed);
-
+        myPlayerController.moveSpeed = myPlayerController.playerBaseSpeed;
         myPlayerController.mySprite.color = Color.white;
         myPlayerController.isInvincible = false;
         gameObject.SetActive(false);
+        Debug.Log("RESET POWER DONE");
     }
 }

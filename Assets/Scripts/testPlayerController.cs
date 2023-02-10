@@ -21,16 +21,22 @@ using TMPro;
 //    	    Debug.Log(text);
 //     }
 
-//TODO: STAGE | have to find out how to make stage transitions
-//TODO: COUNTDOWN AT START && LOADING SCREEN?
+//TODO: AUTO HEALTH PLACER
+//TODO: AUTO POWERUP PLACER
+//TODO: AUTO OBSTACLE PLACER
+//TODO: REDO RESPAWN SYSTEM
+//TODO: LONGER PLAYER GOES FASTER THEY GO BIT BY BIT
+//TODO: COUNTDOWN AT START OR LOADING SCREEN
 //TODO: COYOTE JUMP
 //TODO: MAKE OWN ASSETS
+//TODO: *CHANGE SCORE SYSTEM SO ITS BASED ON DISTANCE
 //TODO: ADD SMOKE EFFECT WHEN LANDING
 //TODO: DUST PARTICLE EFFECT WHEN WALKING
-//TODO: ENDLESS MODE
-//TODO: *CHANGE SCORE SYSTEM SO ITS BASED ON DISTANCE
+//TODO: *LOOK INTO GROUND LOGIC AGAIN A LITTLE -> because player can touch the paltform with their head and regain a dash or smth
+//TODO: EASTEREGG STAGE THROUGH MENUSCREEN?
 //TODO: DIFFERENT CHARACTER?
-//TODO: CHARACTER SELECT SCREEN
+//TODO: CHARACTER SELECT SCREEN?
+//TODO: STAGE? | have to find out how to make stage transitions
 //TODO: SLIDE? 
     
 //POLISH: CAMERA VALUES (WITH THE FASTER POWERUP CAMERA JITTERS)
@@ -38,8 +44,9 @@ using TMPro;
 //POLISH: TRAIL COLORS
 //POLISH: MENU
 //POLISH: CLEANUP CODE(make into functions)
+//POLISH: GROUND LOGIC
+//POLISH: TRAIL(WHEN DOING FIRST JUMP CANT CHANGE TRAIL COLOR)
 
-//REDO: RESPAWN/CHECKPOINT
 
 //FOREVER: ALWAYS THINK ABOUT MOVEMENT
 
@@ -54,15 +61,17 @@ public class testPlayerController : MonoBehaviour
     public float jumpForce;
     public float fastFallForce;
     public float dashTime;
+    public float playerBaseSpeed;
+    public float playerBaseGravity;
 
     public bool isHurt;
     public bool isInvincible;
     public bool isFall;
-    
+
     private bool isGrounded;
     private bool isDoubleJump;
-    private bool canDash; 
-
+    private bool canDash;
+ 
     public LayerMask whatIsGround;
 
     public GameOverScript myGameOver;
@@ -89,6 +98,10 @@ public class testPlayerController : MonoBehaviour
         myHealth = GetComponent<HealthSystem>();
 
         myScoreManager = FindObjectOfType<ScoreManager>();
+
+        myTR.emitting = true;
+        playerBaseSpeed = moveSpeed;
+        playerBaseGravity = myRigidBody.gravityScale;
     }
 
     // Update is called once per frame
@@ -132,19 +145,18 @@ public class testPlayerController : MonoBehaviour
         //if player is grounded and not pressing jump button
         if(isGrounded && !Input.GetButtonDown("Jump"))
         {
-            myTR.emitting = false;
-
+            //myTR.emitting = false;
+            myTR.startColor = new Color (0f, 1f, 0f);
             isDoubleJump = true;
             canDash = true;
         }
 
         //jump
         if(Input.GetButtonDown("Jump") && !myHealth.isPlayerDead){
-            myTR.startColor = new Color (1f, 0f, 0f);
-            myTR.emitting = true;
-
             if(isGrounded || isDoubleJump)
             {
+                myTR.startColor = new Color (1f, 0f, 0f);
+                //myTR.emitting = true;
                 myRigidBody.velocity = new Vector2(myRigidBody.velocity.x, jumpForce);
                 isDoubleJump = !isDoubleJump;
             }
@@ -166,6 +178,12 @@ public class testPlayerController : MonoBehaviour
             myRigidBody.velocity = new Vector2(myRigidBody.velocity.x, myRigidBody.velocity.y-fastFallForce);
         }
 
+        //playerHurt
+        if(isHurt)
+        {
+            myTR.startColor = new Color (0.35f, 0.35f, 0.35f);
+        }
+
         //sets parameter values for animator 
         myAnimator.SetFloat("Speed", myRigidBody.velocity.x);
         myAnimator.SetFloat("Jumping", myRigidBody.velocity.y);
@@ -181,16 +199,15 @@ public class testPlayerController : MonoBehaviour
         myTR.startColor = Color.white;
 
         canDash = false;
-        float cMoon = myRigidBody.gravityScale;
         myRigidBody.gravityScale = 0f;
 
         if(isInvincible)
         {
-            moveSpeed = 15f;
+            moveSpeed = playerBaseSpeed + 5f;
         }
         else
         {
-            moveSpeed = 10f;
+            moveSpeed = playerBaseSpeed + 2f;
         }
 
         myRigidBody.velocity = new Vector2(transform.localScale.x, 0f);
@@ -199,16 +216,16 @@ public class testPlayerController : MonoBehaviour
         
         if(isInvincible)
         {
-            moveSpeed = 10f;
+            moveSpeed = playerBaseSpeed + 5f;
         }
         else
         {
-            moveSpeed = 5f;
+            moveSpeed = playerBaseSpeed;
         }
         
-        myTR.emitting = false;
+        //myTR.emitting = false;
         myRigidBody.velocity = new Vector2(moveSpeed, myRigidBody.velocity.y);
-        myRigidBody.gravityScale = cMoon;
+        myRigidBody.gravityScale = playerBaseGravity;
     }
 
 }
