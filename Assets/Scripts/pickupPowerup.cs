@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class pickupPowerup : MonoBehaviour
 {
+    public GameObject thePlayer;
+
     private testPlayerController myPlayerController;
 
     // Start is called before the first frame update
@@ -21,6 +23,7 @@ public class pickupPowerup : MonoBehaviour
 
             //make object dissapear but still active for coroutine
             gameObject.transform.localScale = new Vector3(0,0,0);
+            gameObject.transform.position = new Vector3(gameObject.transform.position.x+100f, gameObject.transform.position.y, 0);
 
             myPlayerController.isInvincible = true;
             myPlayerController.mySprite.color = Color.yellow;

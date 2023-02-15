@@ -8,7 +8,10 @@ public class PlatformGen : MonoBehaviour
     public float distanceBetweenMin;
     public float distanceBetweenMax;
     public float maxHeightChange;
-    public float randomPointThreshold;
+
+    //Random Point Threshold
+    public float RPTsmallPoints;
+    public float healthOrPowerUp;
 
     public GameObject thePlatform;
     //public GameObject[] thePlatforms;
@@ -73,11 +76,23 @@ public class PlatformGen : MonoBehaviour
             newPlatform.transform.rotation = transform.rotation;
             newPlatform.SetActive(true);
 
-            if(Random.Range(0f, 100f) < randomPointThreshold)
+            if(Random.Range(0f, 100f) < RPTsmallPoints)
             {
                 thePointGenerator.SpawnSmallPoints(new Vector3(transform.position.x, transform.position.y + 1f, transform.position.z));
             }
-           
+           else
+           {
+                if(Random.Range(0f, 100f) < healthOrPowerUp)
+                {
+                    thePointGenerator.SpawnSmallHealth(new Vector3(transform.position.x, transform.position.y + 1f, transform.position.z));
+                }
+                else
+                {
+                    thePointGenerator.SpawnGoFastPowerUp(new Vector3(transform.position.x, transform.position.y + 1f, transform.position.z));
+                }
+                
+           }
+
             transform.position = new Vector3(transform.position.x + (platformWidths[platformSelector]/2), transform.position.y, transform.position.z);
             
         }
