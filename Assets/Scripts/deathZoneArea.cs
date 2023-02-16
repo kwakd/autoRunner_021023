@@ -9,7 +9,6 @@ public class deathZoneArea : MonoBehaviour
     private testPlayerController myPlayerController;
     private HealthSystem myHealth;
     
-    public GameObject dZonePos;
     public GameObject thePlayer;
     public Transform respawnPoint;
 
@@ -39,7 +38,7 @@ public class deathZoneArea : MonoBehaviour
     void updatePosition()
     {
         //HARD CODED THE Y VARIABLE FOR NOW HAVE TO LOOK FOR A BETTER WAY FOR THE DZONE TO FOLLOW PLAYER
-        dZonePos.transform.position = new Vector3(thePlayer.transform.position.x, -6.53f, 0);
+        gameObject.transform.position = new Vector3(thePlayer.transform.position.x, -6.53f, 0);
     }
 
     void OnTriggerEnter2D(Collider2D other)

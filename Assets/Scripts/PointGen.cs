@@ -8,6 +8,7 @@ public class PointGen : MonoBehaviour
     public ObjectPooler smallPointPool;
     public ObjectPooler smallHealthPool;
     public ObjectPooler goFastPowerUpPool;
+    public ObjectPooler groundObstaclePool;
 
     public float distanceBetweenPoints;
 
@@ -42,6 +43,12 @@ public class PointGen : MonoBehaviour
         GameObject smallPoint1 = goFastPowerUpPool.GetPooledObject();
         smallPoint1.transform.position = startPosition;
         smallPoint1.SetActive(true);
+    }
 
+    public void SpawnGroundObstacle(Vector3 startPosition)
+    {
+        GameObject smallPoint1 = groundObstaclePool.GetPooledObject();
+        smallPoint1.transform.position = startPosition;
+        smallPoint1.SetActive(true);
     }
 }

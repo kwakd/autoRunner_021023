@@ -11,7 +11,9 @@ public class PlatformGen : MonoBehaviour
 
     //Random Point Threshold
     public float RPTsmallPoints;
-    public float healthOrPowerUp;
+    public float RPTsmallHealth;
+    public float RPTfastPowerUP;
+    public float RPTgroundObstacle;
 
     public GameObject thePlatform;
     //public GameObject[] thePlatforms;
@@ -69,7 +71,6 @@ public class PlatformGen : MonoBehaviour
             transform.position = new Vector3(transform.position.x + (platformWidths[platformSelector]/2) + distanceBetween, heightChange, transform.position.z);
 
             //Instantiate(theObjectPools[platformSelector], transform.position, transform.rotation);
-            
             GameObject newPlatform = theObjectPools[platformSelector].GetPooledObject();
 
             newPlatform.transform.position = transform.position;
@@ -80,17 +81,20 @@ public class PlatformGen : MonoBehaviour
             {
                 thePointGenerator.SpawnSmallPoints(new Vector3(transform.position.x, transform.position.y + 1f, transform.position.z));
             }
+            else if(Random.Range(0f, 100f) < RPTgroundObstacle)
+            {
+                    thePointGenerator.SpawnGroundObstacle(new Vector3(transform.position.x, transform.position.y+0.5f, transform.position.z));
+            }
            else
            {
-                if(Random.Range(0f, 100f) < healthOrPowerUp)
+                if(Random.Range(0f, 100f) < RPTsmallHealth)
                 {
                     thePointGenerator.SpawnSmallHealth(new Vector3(transform.position.x, transform.position.y + 1f, transform.position.z));
                 }
-                else
+                else if(Random.Range(0f, 100f) < RPTfastPowerUP)
                 {
                     thePointGenerator.SpawnGoFastPowerUp(new Vector3(transform.position.x, transform.position.y + 1f, transform.position.z));
                 }
-                
            }
 
             transform.position = new Vector3(transform.position.x + (platformWidths[platformSelector]/2), transform.position.y, transform.position.z);
