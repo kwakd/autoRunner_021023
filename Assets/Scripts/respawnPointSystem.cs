@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class respawnPointSystem : MonoBehaviour
 {
-    private float timer = 5f;
+    //private float timer = 5f;
 
     private Animator respawnAnimator;
     private testPlayerController myPlayerController;
@@ -23,15 +23,16 @@ public class respawnPointSystem : MonoBehaviour
 
     void Update()
     {
-        if(timer > 0)
-        {
-            timer -= Time.deltaTime;
-        }
-        if(timer <= 0)
-        {
-            updatePosition();
-            timer = 0.1f;
-        }
+        updatePosition();
+        // if(timer > 0)
+        // {
+        //     timer -= Time.deltaTime;
+        // }
+        // if(timer <= 0)
+        // {
+        //     updatePosition();
+        //     timer = 0.1f;
+        // }
     }
 
     void updatePosition()
@@ -39,9 +40,9 @@ public class respawnPointSystem : MonoBehaviour
         //HARD CODED THE Y VARIABLE FOR NOW HAVE TO LOOK FOR A BETTER WAY FOR THE DZONE TO FOLLOW PLAYER
         if(myPlayerController.isGrounded)
         {
-
             gameObject.transform.position = new Vector3(thePlayer.transform.position.x, thePlayer.transform.position.y, 0);
         }
+
     }
 
     void OnTriggerEnter2D(Collider2D other)

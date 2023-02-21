@@ -11,6 +11,7 @@ public class deathZoneArea : MonoBehaviour
     
     public GameObject thePlayer;
     public Transform respawnPoint;
+    public Transform spawnPlatform;
 
     // Start is called before the first frame update
     void Start()
@@ -38,7 +39,7 @@ public class deathZoneArea : MonoBehaviour
     void updatePosition()
     {
         //HARD CODED THE Y VARIABLE FOR NOW HAVE TO LOOK FOR A BETTER WAY FOR THE DZONE TO FOLLOW PLAYER
-        gameObject.transform.position = new Vector3(thePlayer.transform.position.x, -6.53f, 0);
+        gameObject.transform.position = new Vector3(thePlayer.transform.position.x, spawnPlatform.transform.position.y-5f, 0);
     }
 
     void OnTriggerEnter2D(Collider2D other)

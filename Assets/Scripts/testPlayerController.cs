@@ -21,8 +21,6 @@ using TMPro;
 //    	    Debug.Log(text);
 //     }
 
-//TODO: REDO RESPAWN SYSTEM -> UPDATE THE FLAG SO IT FOLLOWS THE PLAYER
-//TODO: GIVE PLAYER A PLATFORM TO WALK ON WHEN THEY GET THE POWERUP TO GO FASTER
 //TODO: LONGER PLAYER GOES FASTER THEY GO BIT BY BIT
 //TODO: COUNTDOWN AT START OR LOADING SCREEN
 //TODO: LOOK INTO JUMPING A LITTLE FEELS A BIT CLUNKY
@@ -40,6 +38,7 @@ using TMPro;
 //TODO: SLIDE? 
     
 //POLISH: CAMERA VALUES (WITH THE FASTER POWERUP CAMERA JITTERS)
+//POLISH: ***RESPAWN SYSTEM***
 //POLISH: JUMP DASH
 //POLISH: goFasterPowerUp POLISH
 //POLISH: MENU
@@ -68,11 +67,13 @@ public class testPlayerController : MonoBehaviour
     public bool isInvincible;
     public bool isFall;
     public bool isGrounded;
+    public bool isInviGrounded;
     
     private bool isDoubleJump;
     private bool canDash;
  
     public LayerMask whatIsGround;
+    public LayerMask whatIsInviPlatform;
 
     public GameOverScript myGameOver;
 
@@ -109,6 +110,7 @@ public class testPlayerController : MonoBehaviour
     {
         //is player touching the ground checker
         isGrounded = Physics2D.IsTouchingLayers(myCollider, whatIsGround);
+        isInviGrounded = Physics2D.IsTouchingLayers(myCollider, whatIsInviPlatform);
 
         //if player is alive keep moving forward
         //else player is dead stop moving
@@ -143,7 +145,7 @@ public class testPlayerController : MonoBehaviour
         }
 
         //if player is grounded and not pressing jump button
-        if(isGrounded && !Input.GetButtonDown("Jump"))
+        if((isGrounded || isInviGrounded) && !Input.GetButtonDown("Jump"))
         {
             //myTR.emitting = false;
             myTR.startColor = new Color (0f, 1f, 0f);
@@ -166,12 +168,12 @@ public class testPlayerController : MonoBehaviour
             myRigidBody.velocity = new Vector2(myRigidBody.velocity.x, myRigidBody.velocity.y * 0.5f);
         }
 
-        if(Input.GetKeyDown(KeyCode.D) && canDash && !isGrounded){
+        if(Input.GetKeyDown(KeyCode.D) && canDash && (!isGrounded || !isInviGrounded)){
             StartCoroutine(Dash());
         }
 
         //fast falling
-        if(Input.GetKeyDown(KeyCode.S) && !isGrounded){
+        if(Input.GetKeyDown(KeyCode.S) && (!isGrounded || !isInviGrounded)){
             myTR.startColor = new Color (0.35f, 1f, 0.75f);
             myTR.emitting = true;
 
@@ -188,7 +190,7 @@ public class testPlayerController : MonoBehaviour
         myAnimator.SetFloat("Speed", myRigidBody.velocity.x);
         myAnimator.SetFloat("Jumping", myRigidBody.velocity.y);
 
-        myAnimator.SetBool("Grounded", isGrounded);
+        myAnimator.SetBool("Grounded", isGrounded || isInviGrounded);
         myAnimator.SetBool("isHurt", isHurt);
         myAnimator.SetBool("DoubleJump", isDoubleJump);
 
