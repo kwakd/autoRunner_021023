@@ -22,6 +22,7 @@ using TMPro;
 //     }
 
 //TODO: LONGER PLAYER GOES FASTER THEY GO BIT BY BIT
+//TODO: SPEEDOMTER
 //TODO: COUNTDOWN AT START OR LOADING SCREEN
 //TODO: LOOK INTO JUMPING A LITTLE FEELS A BIT CLUNKY
 //TODO: COYOTE JUMP
@@ -62,13 +63,19 @@ public class testPlayerController : MonoBehaviour
     public float dashTime;
     public float playerBaseSpeed;
     public float playerBaseGravity;
+    public float speedMultiplier;
+    public float speedIncreaseMilestone;
+    public float checkRadius;
 
     public bool isHurt;
     public bool isInvincible;
     public bool isFall;
     public bool isGrounded;
     public bool isInviGrounded;
+    public bool isFrontTouching;
     
+    private float speedMilestoneCount;
+
     private bool isDoubleJump;
     private bool canDash;
  
@@ -79,6 +86,8 @@ public class testPlayerController : MonoBehaviour
 
     public SpriteRenderer mySprite;
     public Collider2D myCollider;
+    public Transform groundCheck;
+    public Transform frontCheck;
 
     private Rigidbody2D myRigidBody;
     private Animator myAnimator;
@@ -103,14 +112,27 @@ public class testPlayerController : MonoBehaviour
         myTR.emitting = true;
         playerBaseSpeed = moveSpeed;
         playerBaseGravity = myRigidBody.gravityScale;
+        speedMilestoneCount = speedIncreaseMilestone;
     }
 
     // Update is called once per frame
     void Update()
     {
         //is player touching the ground checker
-        isGrounded = Physics2D.IsTouchingLayers(myCollider, whatIsGround);
-        isInviGrounded = Physics2D.IsTouchingLayers(myCollider, whatIsInviPlatform);
+        // isGrounded = Physics2D.IsTouchingLayers(myCollider, whatIsGround);
+        // isInviGrounded = Physics2D.IsTouchingLayers(myCollider, whatIsInviPlatform);
+
+        isGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, whatIsGround);
+        isInviGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, whatIsInviPlatform);
+        isFrontTouching = Physics2D.OverlapCircle(frontCheck.position, checkRadius, whatIsGround);
+
+        if(transform.position.x > speedMilestoneCount)
+        {
+            speedMilestoneCount += speedIncreaseMilestone;
+            speedIncreaseMilestone = speedIncreaseMilestone * speedMultiplier;
+            moveSpeed = moveSpeed * speedMultiplier;
+            Debug.Log("PLAYER IS GOING FASTER");
+        }
 
         //if player is alive keep moving forward
         //else player is dead stop moving
@@ -129,7 +151,6 @@ public class testPlayerController : MonoBehaviour
             myRigidBody.velocity = new Vector2(0, myRigidBody.velocity.y);
             myScoreManager.scoreIncreasing = false;
             myGameOver.Setup(myScoreManager.scoreCount);
-
         }
         
         //if player has fallen into deathZone then freeze them in the air
@@ -155,7 +176,7 @@ public class testPlayerController : MonoBehaviour
 
         //jump
         if(Input.GetButtonDown("Jump") && !myHealth.isPlayerDead){
-            if(isGrounded || isDoubleJump)
+            if(isGrounded || isDoubleJump || isFrontTouching)
             {
                 myTR.startColor = new Color (1f, 0f, 0f);
                 //myTR.emitting = true;
@@ -228,6 +249,18 @@ public class testPlayerController : MonoBehaviour
         //myTR.emitting = false;
         myRigidBody.velocity = new Vector2(moveSpeed, myRigidBody.velocity.y);
         myRigidBody.gravityScale = playerBaseGravity;
+    }
+
+    
+    private void OnDrawGizmosSelected()
+    {   
+        //GROUNDCHECK
+        Gizmos.color = Color.green;
+        Gizmos.DrawSphere(groundCheck.position, checkRadius);
+
+        //FRONTCHECK
+        Gizmos.color = Color.blue;
+        Gizmos.DrawSphere(frontCheck.position, checkRadius);
     }
 
 }
