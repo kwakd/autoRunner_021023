@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class respawnPointSystem : MonoBehaviour
 {
-    //private float timer = 5f;
+    private float timer;
 
     private Animator respawnAnimator;
     private testPlayerController myPlayerController;
@@ -23,16 +23,15 @@ public class respawnPointSystem : MonoBehaviour
 
     void Update()
     {
-        updatePosition();
-        // if(timer > 0)
-        // {
-        //     timer -= Time.deltaTime;
-        // }
-        // if(timer <= 0)
-        // {
-        //     updatePosition();
-        //     timer = 0.1f;
-        // }
+        if(timer > 0)
+        {
+            timer -= Time.deltaTime;
+        }
+        if(timer <= 0)
+        {
+            updatePosition();
+            timer = 0.25f;
+        }
     }
 
     void updatePosition()

@@ -21,32 +21,31 @@ using TMPro;
 //    	    Debug.Log(text);
 //     }
 
-//TODO: LONGER PLAYER GOES FASTER THEY GO BIT BY BIT
-//TODO: SPEEDOMTER
 //TODO: COUNTDOWN AT START OR LOADING SCREEN
-//TODO: LOOK INTO JUMPING A LITTLE FEELS A BIT CLUNKY
-//TODO: COYOTE JUMP
+//TODO: FIND A WAY TO SAVE HIGHSCORE
 //TODO: LOOK INTO MAKING PLATFORMS A BIT LONGER?
 //TODO: MAKE OWN ASSETS
-//TODO: *CHANGE SCORE SYSTEM SO ITS BASED ON DISTANCE
+
+//POLISH: REDO MENU
+//POLISH: *CHANGE SCORE SYSTEM SO ITS BASED ON DISTANCE
+//POLISH: ****MAKE RESPAWN SYSTEM BETTER
+//POLISH: CAMERA VALUES (WITH THE FASTER POWERUP CAMERA JITTERS)
+//POLISH: goFasterPowerUp POLISH -> when collecting multiple it messes up the timing
+
+//======EXTRA TODO======
 //TODO: ADD SMOKE EFFECT WHEN LANDING
 //TODO: DUST PARTICLE EFFECT WHEN WALKING
-//TODO: *LOOK INTO GROUND LOGIC AGAIN A LITTLE -> because player can touch the paltform with their head and regain a dash or smth
 //TODO: EASTEREGG STAGE THROUGH MENUSCREEN?
 //TODO: DIFFERENT CHARACTER?
 //TODO: CHARACTER SELECT SCREEN?
 //TODO: STAGE? | have to find out how to make stage transitions
 //TODO: SLIDE? 
-    
-//POLISH: CAMERA VALUES (WITH THE FASTER POWERUP CAMERA JITTERS)
-//POLISH: ***RESPAWN SYSTEM***
-//POLISH: JUMP DASH
-//POLISH: goFasterPowerUp POLISH
-//POLISH: MENU
-//POLISH: CLEANUP CODE(make into functions)
-//POLISH: GROUND LOGIC
-//POLISH: TRAIL(WHEN DOING FIRST JUMP CANT CHANGE TRAIL COLOR)
+//TODO: SOUND EFFECTS?
 
+//======EXTRA POLISH======
+//POLISH: JUMP DASH
+//POLISH: CLEANUP CODE
+//POLISH: TRAIL(WHEN DOING FIRST JUMP CANT CHANGE TRAIL COLOR)
 
 //FOREVER: ALWAYS THINK ABOUT MOVEMENT
 
@@ -56,7 +55,6 @@ using TMPro;
 
 public class testPlayerController : MonoBehaviour
 {
-
     public float moveSpeed;
     public float jumpForce;
     public float fastFallForce;
@@ -73,26 +71,28 @@ public class testPlayerController : MonoBehaviour
     public bool isGrounded;
     public bool isInviGrounded;
     public bool isFrontTouching;
-    
-    private float speedMilestoneCount;
-
-    private bool isDoubleJump;
-    private bool canDash;
- 
+     
     public LayerMask whatIsGround;
     public LayerMask whatIsInviPlatform;
-
     public GameOverScript myGameOver;
-
     public SpriteRenderer mySprite;
     public Collider2D myCollider;
     public Transform groundCheck;
     public Transform frontCheck;
+    public TMP_Text playerSpeedText;
+
+    private float speedMilestoneCount;
+    private float coyoteTime = 0.5f;
+    private float coyoteTimeCounter;
+    private float playerTempSpeed;
+    private float baseMileStone;
+
+    private bool isDoubleJump;
+    private bool canDash;
 
     private Rigidbody2D myRigidBody;
     private Animator myAnimator;
     private HealthSystem myHealth;
-
     private ScoreManager myScoreManager;
 
     [SerializeField] private TrailRenderer myTR;
@@ -111,8 +111,10 @@ public class testPlayerController : MonoBehaviour
 
         myTR.emitting = true;
         playerBaseSpeed = moveSpeed;
+        playerTempSpeed = moveSpeed;
         playerBaseGravity = myRigidBody.gravityScale;
         speedMilestoneCount = speedIncreaseMilestone;
+        baseMileStone = speedIncreaseMilestone;
     }
 
     // Update is called once per frame
@@ -121,17 +123,18 @@ public class testPlayerController : MonoBehaviour
         //is player touching the ground checker
         // isGrounded = Physics2D.IsTouchingLayers(myCollider, whatIsGround);
         // isInviGrounded = Physics2D.IsTouchingLayers(myCollider, whatIsInviPlatform);
-
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, whatIsGround);
         isInviGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, whatIsInviPlatform);
         isFrontTouching = Physics2D.OverlapCircle(frontCheck.position, checkRadius, whatIsGround);
-
+        
+        //make the player go faster
         if(transform.position.x > speedMilestoneCount)
         {
             speedMilestoneCount += speedIncreaseMilestone;
-            speedIncreaseMilestone = speedIncreaseMilestone * speedMultiplier;
+            speedIncreaseMilestone = speedIncreaseMilestone * speedMultiplier * 1.5f;
             moveSpeed = moveSpeed * speedMultiplier;
-            Debug.Log("PLAYER IS GOING FASTER");
+            playerTempSpeed = moveSpeed;
+            //Debug.Log("PLAYER IS GOING FASTER");
         }
 
         //if player is alive keep moving forward
@@ -159,6 +162,9 @@ public class testPlayerController : MonoBehaviour
         {
             myRigidBody.isKinematic = true;
             myRigidBody.velocity = new Vector2(0, 0);
+            moveSpeed = playerBaseSpeed;
+            playerTempSpeed = playerBaseSpeed;
+            speedIncreaseMilestone = baseMileStone;
         }
         else
         {
@@ -172,21 +178,31 @@ public class testPlayerController : MonoBehaviour
             myTR.startColor = new Color (0f, 1f, 0f);
             isDoubleJump = true;
             canDash = true;
+            coyoteTimeCounter = coyoteTime;
+        }
+        else
+        {
+            coyoteTimeCounter -= Time.deltaTime;
         }
 
         //jump
         if(Input.GetButtonDown("Jump") && !myHealth.isPlayerDead){
-            if(isGrounded || isDoubleJump || isFrontTouching)
+            if(coyoteTimeCounter > 0f || isFrontTouching)
             {
                 myTR.startColor = new Color (1f, 0f, 0f);
-                //myTR.emitting = true;
+                myRigidBody.velocity = new Vector2(myRigidBody.velocity.x, jumpForce);
+            }
+            else if(isDoubleJump)
+            {
+                // myTR.startColor = new Color (0f, 1f, 0f);
                 myRigidBody.velocity = new Vector2(myRigidBody.velocity.x, jumpForce);
                 isDoubleJump = !isDoubleJump;
             }
         }
-        //for better jumping
+        //for better jumping (releasing jump)
         if(Input.GetButtonUp("Jump") && myRigidBody.velocity.y > 0f){
             myRigidBody.velocity = new Vector2(myRigidBody.velocity.x, myRigidBody.velocity.y * 0.5f);
+            coyoteTimeCounter = 0f;
         }
 
         if(Input.GetKeyDown(KeyCode.D) && canDash && (!isGrounded || !isInviGrounded)){
@@ -205,6 +221,8 @@ public class testPlayerController : MonoBehaviour
         if(isHurt)
         {
             myTR.startColor = new Color (0.35f, 0.35f, 0.35f);
+            playerTempSpeed = playerBaseSpeed;
+            speedIncreaseMilestone = baseMileStone;
         }
 
         //sets parameter values for animator 
@@ -215,6 +233,13 @@ public class testPlayerController : MonoBehaviour
         myAnimator.SetBool("isHurt", isHurt);
         myAnimator.SetBool("DoubleJump", isDoubleJump);
 
+        UpdateSpeedTextBox();
+
+    }
+
+    void UpdateSpeedTextBox()
+    {
+        playerSpeedText.text = Mathf.Round(moveSpeed).ToString();
     }
 
     private IEnumerator Dash()
@@ -226,11 +251,11 @@ public class testPlayerController : MonoBehaviour
 
         if(isInvincible)
         {
-            moveSpeed = playerBaseSpeed + 5f;
+            moveSpeed = playerTempSpeed + 5f;
         }
         else
         {
-            moveSpeed = playerBaseSpeed + 2f;
+            moveSpeed = playerTempSpeed + 2f;
         }
 
         myRigidBody.velocity = new Vector2(transform.localScale.x, 0f);
@@ -239,18 +264,17 @@ public class testPlayerController : MonoBehaviour
         
         if(isInvincible)
         {
-            moveSpeed = playerBaseSpeed + 5f;
+            moveSpeed = playerTempSpeed + 5f;
         }
         else
         {
-            moveSpeed = playerBaseSpeed;
+            moveSpeed = playerTempSpeed;
         }
         
         //myTR.emitting = false;
         myRigidBody.velocity = new Vector2(moveSpeed, myRigidBody.velocity.y);
         myRigidBody.gravityScale = playerBaseGravity;
     }
-
     
     private void OnDrawGizmosSelected()
     {   
@@ -262,5 +286,7 @@ public class testPlayerController : MonoBehaviour
         Gizmos.color = Color.blue;
         Gizmos.DrawSphere(frontCheck.position, checkRadius);
     }
+
+
 
 }
