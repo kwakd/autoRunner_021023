@@ -12,11 +12,13 @@ public class ScoreManager : MonoBehaviour
     public bool scoreIncreasing;
 
     public TextMeshProUGUI scoreText;
+    public TextMeshProUGUI highScoreText;
 
     // Start is called before the first frame update
     void Start()
     {
         scoreIncreasing = true;
+        updateHighScoreText();
     }
 
     // Update is called once per frame
@@ -33,5 +35,21 @@ public class ScoreManager : MonoBehaviour
     public void AddScore(int pointsToAdd)
     {
         scoreCount += pointsToAdd;
+        checkHighScore();
+    }
+
+    void checkHighScore()
+    {
+        if(scoreCount > PlayerPrefs.GetInt("HighScore", 0))
+        {
+            int tempInt = (int)Mathf.Round(scoreCount);
+            PlayerPrefs.SetInt("HighScore", tempInt);
+            updateHighScoreText();
+        }
+    }
+
+    void updateHighScoreText()
+    {
+        highScoreText.text = $"HighScore: {PlayerPrefs.GetInt("HighScore", 0)}";
     }
 }

@@ -16,7 +16,6 @@ public class PlatformGen : MonoBehaviour
     public float RPTgroundObstacle;
 
     public GameObject thePlatform;
-    //public GameObject[] thePlatforms;
     public ObjectPooler[] theObjectPools;
     public Transform generationPoint;
     public Transform maxHeightPoint;
