@@ -83,7 +83,7 @@ public class PlatformGen : MonoBehaviour
             }
             else if(Random.Range(0f, 100f) < RPTgroundObstacle)
             {
-                    thePointGenerator.SpawnGroundObstacle(new Vector3(transform.position.x, transform.position.y+0.5f, transform.position.z));
+                    thePointGenerator.SpawnGroundObstacle(new Vector3(transform.position.x, transform.position.y + 0.59f, transform.position.z));
             }
            else
            {

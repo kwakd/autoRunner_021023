@@ -226,8 +226,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 25076152}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 33, y: -3.59, z: 0}
-  m_LocalScale: {x: 300, y: 0.5370024, z: 1}
+  m_LocalPosition: {x: 130.2, y: -3.59, z: 0}
+  m_LocalScale: {x: 500, y: 0.5370024, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -531,13 +531,13 @@ MonoBehaviour:
   m_ScreenX: 0.08999999
   m_ScreenY: 0.71000004
   m_CameraDistance: 10
-  m_DeadZoneWidth: 0.41
+  m_DeadZoneWidth: 0.54
   m_DeadZoneHeight: 0.21073169
   m_DeadZoneDepth: 0
   m_UnlimitedSoftZone: 0
   m_SoftZoneWidth: 0.8
   m_SoftZoneHeight: 0.62
-  m_BiasX: -0.28999978
+  m_BiasX: -0.28999949
   m_BiasY: 0
   m_CenterOnActivate: 1
   m_GroupFramingMode: 2
@@ -1468,9 +1468,9 @@ MonoBehaviour:
   distanceBetweenMin: 5
   distanceBetweenMax: 10
   maxHeightChange: 5
-  RPTsmallPoints: 0
-  RPTsmallHealth: 0
-  RPTfastPowerUP: 0
+  RPTsmallPoints: 80
+  RPTsmallHealth: 10
+  RPTfastPowerUP: 10
   RPTgroundObstacle: 10
   thePlatform: {fileID: 5746331475602655955, guid: 1f0d5d00d0c96e042b4c5d6c0a55c766, type: 3}
   theObjectPools:
@@ -1932,7 +1932,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &1510459004
 BoxCollider2D:
@@ -2989,9 +2989,9 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 4050726704450683975, guid: 46fdf54fc75873b49a338ff0a10d2bfc, type: 3}
-      propertyPath: m_text
-      value: 20
+    - target: {fileID: 4333969755440792529, guid: 46fdf54fc75873b49a338ff0a10d2bfc, type: 3}
+      propertyPath: maxHealth
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 4333969755440792536, guid: 46fdf54fc75873b49a338ff0a10d2bfc, type: 3}
       propertyPath: m_Name
@@ -3046,12 +3046,12 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1387350003}
     - target: {fileID: 4333969755440792543, guid: 46fdf54fc75873b49a338ff0a10d2bfc, type: 3}
-      propertyPath: speedIncreaseMilestone
-      value: 10
+      propertyPath: speedMultiplier
+      value: 1.1
       objectReference: {fileID: 0}
-    - target: {fileID: 6939147044027759186, guid: 46fdf54fc75873b49a338ff0a10d2bfc, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0.1
+    - target: {fileID: 4333969755440792543, guid: 46fdf54fc75873b49a338ff0a10d2bfc, type: 3}
+      propertyPath: speedIncreaseMilestone
+      value: 100
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 46fdf54fc75873b49a338ff0a10d2bfc, type: 3}
@@ -3064,7 +3064,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 6612414193947641696, guid: 459532556a90e3f469aad6c8f392595e, type: 3}
       propertyPath: m_RootOrder
-      value: 8
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 6612414193947641696, guid: 459532556a90e3f469aad6c8f392595e, type: 3}
       propertyPath: m_LocalPosition.x
