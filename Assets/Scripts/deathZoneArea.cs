@@ -8,6 +8,7 @@ public class deathZoneArea : MonoBehaviour
 
     private testPlayerController myPlayerController;
     private HealthSystem myHealth;
+    private countDownController countDownControllerTimer;
     
     public GameObject thePlayer;
     public Transform respawnPoint;
@@ -18,6 +19,7 @@ public class deathZoneArea : MonoBehaviour
     {
         myPlayerController = FindObjectOfType<testPlayerController>();
         myHealth = FindObjectOfType<HealthSystem>();
+        countDownControllerTimer = FindObjectOfType<countDownController>();
     }
 
     void Update()
@@ -46,9 +48,8 @@ public class deathZoneArea : MonoBehaviour
     {
         if(other.gameObject.name == "testPlayer2")
         {
-            myHealth.TakeDamage(1f);
+            myHealth.TakeDamage(5f);
             myPlayerController.isFall = true;
-
             StartCoroutine(RespawnPlayer());
         }
     }
@@ -57,6 +58,11 @@ public class deathZoneArea : MonoBehaviour
     {
         yield return new WaitForSeconds(1f);
         thePlayer.transform.position = respawnPoint.position;
+        //start countdown timer here
+        myPlayerController.countDownDone = false;
+        countDownControllerTimer.startCountDownRespawn();
+
+        //StartCoroutine(countDownToStart());
         myPlayerController.isFall = false;
     }
 }

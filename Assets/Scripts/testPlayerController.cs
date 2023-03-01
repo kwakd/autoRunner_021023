@@ -21,17 +21,16 @@ using TMPro;
 //    	    Debug.Log(text);
 //     }
 
+//TODO: REDO MENU
 //TODO: SIMPLE SOUND EFFECTS
 //TODO: MAKE OWN ASSETS
 
-//POLISH: REDO MENU
 //POLISH: *CHANGE SCORE SYSTEM SO ITS BASED ON DISTANCE
-//POLISH: ****MAKE RESPAWN SYSTEM BETTER
 //POLISH: CAMERA VALUES (WITH THE FASTER POWERUP CAMERA JITTERS)
 //POLISH: goFasterPowerUp POLISH -> when collecting multiple it messes up the timing
+//POLISH: RESPAWN SYSTEM (atm have an acceptable respawn system)
 
 //======EXTRA TODO======
-//TODO: COUNTDOWN AT START OR LOADING SCREEN
 //TODO: ADD SMOKE EFFECT WHEN LANDING
 //TODO: DUST PARTICLE EFFECT WHEN WALKING
 //TODO: EASTEREGG STAGE THROUGH MENUSCREEN?
@@ -51,34 +50,17 @@ using TMPro;
 //GOAL: SOMETHING LIKE THIS LMAO (https://www.youtube.com/watch?v=C3JQld-qWls&t=44s)
 
 
-
 public class testPlayerController : MonoBehaviour
 {
-    public float moveSpeed;
-    public float jumpForce;
-    public float fastFallForce;
-    public float dashTime;
-    public float playerBaseSpeed;
-    public float playerBaseGravity;
-    public float speedMultiplier;
-    public float speedIncreaseMilestone;
-    public float checkRadius;
-
-    public bool isHurt;
-    public bool isInvincible;
-    public bool isFall;
-    public bool isGrounded;
-    public bool isInviGrounded;
-    public bool isFrontTouching;
-     
-    public LayerMask whatIsGround;
-    public LayerMask whatIsInviPlatform;
-    public GameOverScript myGameOver;
-    public SpriteRenderer mySprite;
-    public Collider2D myCollider;
-    public Transform groundCheck;
-    public Transform frontCheck;
-    public TMP_Text playerSpeedText;
+    public  float moveSpeed;
+    public  float jumpForce;
+    public  float fastFallForce;
+    public  float dashTime;
+    public  float playerBaseSpeed;
+    public  float playerBaseGravity;
+    public  float speedMultiplier;
+    public  float speedIncreaseMilestone;
+    public  float checkRadius;
 
     private float speedMilestoneCount;
     private float coyoteTime = 0.5f;
@@ -86,13 +68,30 @@ public class testPlayerController : MonoBehaviour
     private float playerTempSpeed;
     private float baseMileStone;
 
-    private bool isDoubleJump;
-    private bool canDash;
+    public  bool  isHurt;
+    public  bool  isInvincible;
+    public  bool  isFall;
+    public  bool  isGrounded;
+    public  bool  isInviGrounded;
+    public  bool  isFrontTouching;
+    public  bool  countDownDone;
 
-    private Rigidbody2D myRigidBody;
-    private Animator myAnimator;
-    private HealthSystem myHealth;
-    private ScoreManager myScoreManager;
+    private bool  isDoubleJump;
+    private bool  canDash;
+    
+    public LayerMask      whatIsGround;
+    public LayerMask      whatIsInviPlatform;
+    public GameOverScript myGameOver;
+    public SpriteRenderer mySprite;
+    public Collider2D     myCollider;
+    public Transform      groundCheck;
+    public Transform      frontCheck;
+    public TMP_Text       playerSpeedText;
+
+    private Rigidbody2D   myRigidBody;
+    private Animator      myAnimator;
+    private HealthSystem  myHealth;
+    private ScoreManager  myScoreManager;
 
     [SerializeField] private TrailRenderer myTR;
      
@@ -109,6 +108,7 @@ public class testPlayerController : MonoBehaviour
         myScoreManager = FindObjectOfType<ScoreManager>();
 
         myTR.emitting = true;
+        countDownDone = false;
         playerBaseSpeed = moveSpeed;
         playerTempSpeed = moveSpeed;
         playerBaseGravity = myRigidBody.gravityScale;
@@ -138,14 +138,24 @@ public class testPlayerController : MonoBehaviour
 
         //if player is alive keep moving forward
         //else player is dead stop moving
-        if(myHealth.isPlayerDead == false)
+        if(!myHealth.isPlayerDead)
         {
-            myRigidBody.velocity = new Vector2(moveSpeed, myRigidBody.velocity.y);
-
-            if(!isFall && !isInvincible)
+            if(countDownDone)
             {
-                myHealth.TakeDamage(0.5f * Time.deltaTime);
+                myScoreManager.scoreIncreasing = true;
+                myRigidBody.velocity = new Vector2(moveSpeed, myRigidBody.velocity.y);
+
+                if(!isFall && !isInvincible)
+                {
+                    myHealth.TakeDamage(0.5f * Time.deltaTime);
+                }
             }
+            else
+            {
+                myScoreManager.scoreIncreasing = false;
+                myRigidBody.velocity = new Vector2(myRigidBody.velocity.x, myRigidBody.velocity.y);
+            }
+            
         }
         else
         {
@@ -185,7 +195,7 @@ public class testPlayerController : MonoBehaviour
         }
 
         //jump
-        if(Input.GetButtonDown("Jump") && !myHealth.isPlayerDead){
+        if(Input.GetButtonDown("Jump") && !myHealth.isPlayerDead && countDownDone){
             if(coyoteTimeCounter > 0f || isFrontTouching)
             {
                 myTR.startColor = new Color (1f, 0f, 0f);
@@ -204,7 +214,10 @@ public class testPlayerController : MonoBehaviour
             coyoteTimeCounter = 0f;
         }
 
-        if(Input.GetKeyDown(KeyCode.D) && canDash && (!isGrounded || !isInviGrounded)){
+        // if(Input.GetKeyDown(KeyCode.D) && canDash && (!isGrounded || !isInviGrounded)){
+        //     StartCoroutine(Dash());
+        // }
+        if(Input.GetKeyDown(KeyCode.D) && canDash && !isGrounded){
             StartCoroutine(Dash());
         }
 

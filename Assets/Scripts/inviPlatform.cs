@@ -18,22 +18,26 @@ public class inviPlatform : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(timer > 0)
+        {
+            timer -= Time.deltaTime;
+        }
+        else if(timer <= 0)
+        {
+            updatePosition();
+            timer = 0.5f;
+        }
+
         if(!myPlayerController.isInvincible)
         {
             GetComponent<BoxCollider2D>().enabled = false;
-            if(timer > 0)
-            {
-                timer -= Time.deltaTime;
-            }
-            if(timer <= 0)
-            {
-                updatePosition();
-                timer = 0.5f;
-            }
+            GetComponent<SpriteRenderer>().enabled = false;
+
         }
         else
         {
             GetComponent<BoxCollider2D>().enabled = true;
+            GetComponent<SpriteRenderer>().enabled = true;
         }
     }
 

@@ -22,7 +22,7 @@ public class testObstacle1 : MonoBehaviour
             myPlayerController.isHurt = true;
             myPlayerController.mySprite.color = Color.red;
 
-            myHealth.TakeDamage(0.5f);
+            myHealth.TakeDamage(5f);
 
             StartCoroutine(ResetIFrame());
         }

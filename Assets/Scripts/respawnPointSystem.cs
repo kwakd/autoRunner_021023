@@ -12,8 +12,6 @@ public class respawnPointSystem : MonoBehaviour
     public GameObject thePlayer;
     public GameObject respawnCheckerPoint;
 
-    
-
     // Start is called before the first frame update
     void Start()
     {
@@ -23,23 +21,24 @@ public class respawnPointSystem : MonoBehaviour
 
     void Update()
     {
-        if(timer > 0)
-        {
-            timer -= Time.deltaTime;
-        }
-        if(timer <= 0)
-        {
-            updatePosition();
-            timer = 0.25f;
-        }
+        // if(timer > 0)
+        // {
+        //     timer -= Time.deltaTime;
+        // }
+        // if(timer <= 0)
+        // {
+        //     updatePosition();
+        //     timer = 0.25f;
+        // }
+        updatePosition();
     }
 
     void updatePosition()
     {
         //HARD CODED THE Y VARIABLE FOR NOW HAVE TO LOOK FOR A BETTER WAY FOR THE DZONE TO FOLLOW PLAYER
-        if(myPlayerController.isGrounded)
+        if(myPlayerController.isGrounded && !myPlayerController.isHurt)
         {
-            gameObject.transform.position = new Vector3(thePlayer.transform.position.x, thePlayer.transform.position.y, 0);
+            gameObject.transform.position = new Vector3(thePlayer.transform.position.x-0.5f, thePlayer.transform.position.y, 0);
         }
 
     }
