@@ -13,12 +13,14 @@ public class ScoreManager : MonoBehaviour
 
     public TextMeshProUGUI scoreText;
     public TextMeshProUGUI highScoreText;
+    public TextMeshProUGUI highScoreNumberOnlyText;
 
     // Start is called before the first frame update
     void Start()
     {
         scoreIncreasing = true;
         updateHighScoreText();
+        updateHighScoreTextNumberOnly();
     }
 
     // Update is called once per frame
@@ -51,5 +53,11 @@ public class ScoreManager : MonoBehaviour
     void updateHighScoreText()
     {
         highScoreText.text = $"HighScore: {PlayerPrefs.GetInt("HighScore", 0)}";
+    }
+
+    //FOR MAIN MENU
+    void updateHighScoreTextNumberOnly()
+    {
+        highScoreNumberOnlyText.text = $"{PlayerPrefs.GetInt("HighScore", 0)}";
     }
 }
