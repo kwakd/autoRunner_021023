@@ -10,8 +10,11 @@ public class GameOverScript : MonoBehaviour
 {
     public TextMeshProUGUI pointsText;
 
+    [SerializeField] private AudioSource   gameOverSoundEffect;
+
     public void Setup(float score)
     {
+        gameOverSoundEffect.Play();
         gameObject.SetActive(true);
         pointsText.text = Mathf.Round(score) + " POINTS";
     }

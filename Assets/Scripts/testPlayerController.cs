@@ -21,16 +21,17 @@ using TMPro;
 //    	    Debug.Log(text);
 //     }
 
-//TODO: REDO MENU
-//TODO: SIMPLE SOUND EFFECTS
-//TODO: MAKE OWN ASSETS
+//TODO: PAUSE MENU
 
+//POLISH: PICK UP POINT SOUND EFFECT NOT WORKING
 //POLISH: *CHANGE SCORE SYSTEM SO ITS BASED ON DISTANCE
 //POLISH: CAMERA VALUES (WITH THE FASTER POWERUP CAMERA JITTERS)
 //POLISH: goFasterPowerUp POLISH -> when collecting multiple it messes up the timing
 //POLISH: RESPAWN SYSTEM (atm have an acceptable respawn system)
+//POLISH: CAN ALWAYS ADD MORE SOUND EFFECTS
 
 //======EXTRA TODO======
+//TODO: ADD PASSIVE SPECIAL POWER FOR CHARACTER (FLIES SUPER FAST?)
 //TODO: ADD SMOKE EFFECT WHEN LANDING
 //TODO: DUST PARTICLE EFFECT WHEN WALKING
 //TODO: EASTEREGG STAGE THROUGH MENUSCREEN?
@@ -38,10 +39,8 @@ using TMPro;
 //TODO: CHARACTER SELECT SCREEN?
 //TODO: STAGE? | have to find out how to make stage transitions
 //TODO: SLIDE? 
-//TODO: SOUND EFFECTS?
 
 //======EXTRA POLISH======
-//POLISH: JUMP DASH
 //POLISH: CLEANUP CODE
 //POLISH: TRAIL(WHEN DOING FIRST JUMP CANT CHANGE TRAIL COLOR)
 
@@ -78,6 +77,7 @@ public class testPlayerController : MonoBehaviour
 
     private bool  isDoubleJump;
     private bool  canDash;
+    private bool  isPaused;
     
     public LayerMask      whatIsGround;
     public LayerMask      whatIsInviPlatform;
@@ -87,6 +87,7 @@ public class testPlayerController : MonoBehaviour
     public Transform      groundCheck;
     public Transform      frontCheck;
     public TMP_Text       playerSpeedText;
+    public GameObject     pauseScreen;
 
     private Rigidbody2D   myRigidBody;
     private Animator      myAnimator;
@@ -94,6 +95,10 @@ public class testPlayerController : MonoBehaviour
     private ScoreManager  myScoreManager;
 
     [SerializeField] private TrailRenderer myTR;
+    [SerializeField] private AudioSource   jumpSoundEffect;
+    [SerializeField] private AudioSource   dashSoundEffect;
+    [SerializeField] private AudioSource   speedUpSoundEffect;
+    [SerializeField] private AudioSource   fastFallSoundEffect;
      
     // Start is called before the first frame update
     void Start()
@@ -107,18 +112,37 @@ public class testPlayerController : MonoBehaviour
 
         myScoreManager = FindObjectOfType<ScoreManager>();
 
+        Time.timeScale = 1;
         myTR.emitting = true;
         countDownDone = false;
+        isPaused = false;
         playerBaseSpeed = moveSpeed;
         playerTempSpeed = moveSpeed;
         playerBaseGravity = myRigidBody.gravityScale;
         speedMilestoneCount = speedIncreaseMilestone;
         baseMileStone = speedIncreaseMilestone;
+        //gameOverSoundEffect.time = 0.1f;
+
     }
 
     // Update is called once per frame
     void Update()
     {
+        if(Input.GetKeyDown(KeyCode.P)){
+            if(isPaused)
+            {
+                pauseScreen.SetActive(false);
+                Time.timeScale = 1;
+                isPaused = false;
+            }
+            else
+            {
+                pauseScreen.SetActive(true);
+                Time.timeScale = 0;
+                isPaused = true;
+            }
+        }
+
         //is player touching the ground checker
         // isGrounded = Physics2D.IsTouchingLayers(myCollider, whatIsGround);
         // isInviGrounded = Physics2D.IsTouchingLayers(myCollider, whatIsInviPlatform);
@@ -129,8 +153,9 @@ public class testPlayerController : MonoBehaviour
         //make the player go faster
         if(transform.position.x > speedMilestoneCount)
         {
+            speedUpSoundEffect.Play();
             speedMilestoneCount += speedIncreaseMilestone;
-            speedIncreaseMilestone = speedIncreaseMilestone * speedMultiplier * 1.5f;
+            speedIncreaseMilestone = speedIncreaseMilestone * speedMultiplier * 2f;
             moveSpeed = moveSpeed * speedMultiplier;
             playerTempSpeed = moveSpeed;
             //Debug.Log("PLAYER IS GOING FASTER");
@@ -198,12 +223,14 @@ public class testPlayerController : MonoBehaviour
         if(Input.GetButtonDown("Jump") && !myHealth.isPlayerDead && countDownDone){
             if(coyoteTimeCounter > 0f || isFrontTouching)
             {
+                jumpSoundEffect.Play();
                 myTR.startColor = new Color (1f, 0f, 0f);
                 myRigidBody.velocity = new Vector2(myRigidBody.velocity.x, jumpForce);
             }
             else if(isDoubleJump)
             {
                 // myTR.startColor = new Color (0f, 1f, 0f);
+                jumpSoundEffect.Play();
                 myRigidBody.velocity = new Vector2(myRigidBody.velocity.x, jumpForce);
                 isDoubleJump = !isDoubleJump;
             }
@@ -223,6 +250,7 @@ public class testPlayerController : MonoBehaviour
 
         //fast falling
         if(Input.GetKeyDown(KeyCode.S) && (!isGrounded || !isInviGrounded)){
+            //fastFallSoundEffect.Play();
             myTR.startColor = new Color (0.35f, 1f, 0.75f);
             myTR.emitting = true;
 
@@ -232,6 +260,7 @@ public class testPlayerController : MonoBehaviour
         //playerHurt
         if(isHurt)
         {
+            //gameOverSoundEffect.Play();
             myTR.startColor = new Color (0.35f, 0.35f, 0.35f);
             playerTempSpeed = playerBaseSpeed;
             speedIncreaseMilestone = baseMileStone;
@@ -257,7 +286,7 @@ public class testPlayerController : MonoBehaviour
     private IEnumerator Dash()
     {
         myTR.startColor = Color.white;
-
+        dashSoundEffect.Play();
         canDash = false;
         myRigidBody.gravityScale = 0f;
 

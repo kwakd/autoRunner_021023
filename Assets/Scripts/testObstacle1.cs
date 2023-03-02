@@ -7,6 +7,8 @@ public class testObstacle1 : MonoBehaviour
     private testPlayerController myPlayerController;
     private HealthSystem myHealth;
 
+    [SerializeField] private AudioSource   gameOverSoundEffect;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -21,7 +23,7 @@ public class testObstacle1 : MonoBehaviour
             myPlayerController.moveSpeed = myPlayerController.moveSpeed/2;
             myPlayerController.isHurt = true;
             myPlayerController.mySprite.color = Color.red;
-
+            gameOverSoundEffect.Play();
             myHealth.TakeDamage(5f);
 
             StartCoroutine(ResetIFrame());

@@ -9,6 +9,8 @@ public class pickupPoints : MonoBehaviour
 
     private ScoreManager myScoreManager;
 
+    [SerializeField] private AudioSource pickUpPointSoundEffect;
+
 
     // Start is called before the first frame update
     void Start()
@@ -20,8 +22,9 @@ public class pickupPoints : MonoBehaviour
     {
         if(other.gameObject.name == "testPlayer2")
         {
+            //pick up sound effect not working?
+            pickUpPointSoundEffect.Play();
             myScoreManager.AddScore(scoreToGive);
-            
             // look into setactive vs destory
             // also have to look into object pooling
             gameObject.SetActive(false);
