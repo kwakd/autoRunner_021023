@@ -31,7 +31,7 @@ public class ScoreManager : MonoBehaviour
             scoreCount += pointsPerSec * Time.deltaTime;
         }
         
-        scoreText.text = "Score: " + Mathf.Round(scoreCount);
+        scoreText.text = "SCORE: " + Mathf.Round(scoreCount);
     }
 
     public void AddScore(int pointsToAdd)
